@@ -182,8 +182,9 @@ MAP=$(echo "$MAP" | sed 's/\([{[\[:,]\)[[:space:]]\+/\1/g')
 # shellcheck disable=SC2001
 MAP=$(echo "$MAP" | sed 's/[[:space:]]\+\([}\],]\)/\1/g')
 # Step 6: Trim leading/trailing spaces
-MAP="${MAP#"${MAP%%[![:space:]]*}"}"
-MAP="${MAP%"${MAP##*[![:space:]]}"}"
+# Using bash parameter expansion: ${var#pattern} removes prefix, ${var%pattern} removes suffix
+MAP="${MAP#"${MAP%%[![:space:]]*}"}"  # Remove leading whitespace
+MAP="${MAP%"${MAP##*[![:space:]]}"}"  # Remove trailing whitespace
 
 log "DEBUG: Normalized MAP='${MAP}'"
 

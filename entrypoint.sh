@@ -173,13 +173,17 @@ MAP=$(echo "$MAP" | tr -d '\n\r')
 # Step 2: Remove all tabs
 MAP=$(echo "$MAP" | tr -d '\t')
 # Step 3: Collapse multiple spaces into single space
+# shellcheck disable=SC2001
 MAP=$(echo "$MAP" | sed 's/[[:space:]]\{2,\}/ /g')
 # Step 4: Remove spaces after { [ , :
+# shellcheck disable=SC2001
 MAP=$(echo "$MAP" | sed 's/\([{[\[:,]\)[[:space:]]\+/\1/g')
 # Step 5: Remove spaces before } ] ,
+# shellcheck disable=SC2001
 MAP=$(echo "$MAP" | sed 's/[[:space:]]\+\([}\],]\)/\1/g')
 # Step 6: Trim leading/trailing spaces
-MAP=$(echo "$MAP" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+MAP="${MAP#"${MAP%%[![:space:]]*}"}"
+MAP="${MAP%"${MAP##*[![:space:]]}"}"
 
 log "DEBUG: Normalized MAP='${MAP}'"
 
